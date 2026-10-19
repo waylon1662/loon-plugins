@@ -6,7 +6,7 @@
 #!loon_version=3.5.1(998)
 
 [Argument]
-app = select,"sw","tg","turrit","ime","ng","lingo",tag=客户端
+app = select,"sg","tg","turrit","ime","ng","lingo",tag=客户端
 
 [MITM]
 hostname = %APPEND% t.me
