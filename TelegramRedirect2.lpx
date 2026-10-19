@@ -1,0 +1,19 @@
+
+#!name=Telegram（个人修改版）
+#!desc=修复 t.me 链接查询参数，支持多客户端选择
+#!author=Waylon
+#!icon=https://telegram.org/img/t_logo.png
+#!loon_version=3.5.1(998)
+
+[Argument]
+app = select,"sg","tg","turrit","ime","ng","lingo",tag=客户端
+
+[MITM]
+hostname = %APPEND% t.me
+
+[Rewrite]
+# 普通用户名：先沿用已验证的简单匹配规则
+request if ${url} ~= /^https:\/\/t\.me\/([A-Za-z][A-Za-z0-9_]{3,30}[A-Za-z0-9])\/?(?:\?.*)?$/ as item then redirect(307, "${app}://resolve?domain=${item.1}")
+
+# 私有邀请链接
+request if ${url} ~= /^https:\/\/t\.me\/\+([A-Za-z0-9_-]+)\/?(?:\?.*)?$/ as item then redirect(307, "${app}://join?invite=${item.1}")
