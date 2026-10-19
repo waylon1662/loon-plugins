@@ -1,6 +1,7 @@
-#!name=Telegram 重定向（SW 修正版）
-#!desc=基于可莉 Telegram 重定向规则修复，支持 t.me 用户名链接后的 ?ref= 等查询参数。
-#!author=OpenAI
+#!name=Telegram（个人修改版）
+#!desc=基于可莉，修复 t.me 链接查询参数，支持多客户端选择
+#!author=Waylon
+#!icon=https://telegram.org/img/t_logo.png
 #!loon_version=3.5.1(998)
 
 [Argument]
