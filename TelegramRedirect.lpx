@@ -1,0 +1,17 @@
+#!name=Telegram 重定向（SW 修正版）
+#!desc=基于可莉 Telegram 重定向规则修复，支持 t.me 用户名链接后的 ?ref= 等查询参数。
+#!author=OpenAI
+#!loon_version=3.5.1(998)
+
+[Argument]
+app = select,"sg","turrit","tg",tag=客户端
+
+[MITM]
+hostname = %APPEND% t.me
+
+[Rewrite]
+# 公开用户名链接：兼容可选尾斜杠和查询参数（如 ?ref=xxx）
+request if ${url} ~= /^https:\/\/t\.me\/([A-Za-z][A-Za-z0-9_]{3,30}[A-Za-z0-9])\/?(?:\?.*)?$/ as item then redirect(307, "${app}://resolve?domain=${item.1}")
+
+# 私有邀请链接
+request if ${url} ~= /^https:\/\/t\.me\/\+([A-Za-z0-9_-]+)\/?(?:\?.*)?$/ as item then redirect(307, "${app}://join?invite=${item.1}")
