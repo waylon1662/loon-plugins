@@ -2,7 +2,7 @@
 #!desc=基于可莉，修复 t.me 链接查询参数，支持多客户端选择
 #!author=Waylon
 #!icon=https://telegram.org/img/t_logo.png
-#!loon_version=3.5.3(1008)
+#!loon_version=3.5.1(998)
 
 [Argument]
 app = select,"sg","tg","turrit","ime","ng","lingo",tag=客户端
