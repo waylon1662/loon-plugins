@@ -12,13 +12,8 @@ app = select,"sw","tg","turrit","ime","ng","lingo",tag=客户端
 hostname = %APPEND% t.me
 
 [Rewrite]
-# 保留路径清单（维护用）
-# 新增特殊路径时，同步修改下面普通用户名规则中的排除列表
-# joinchat|addstickers|addemoji|addtheme|share|proxy|socks|iv|s|c|login|setlanguage|confirmphone|bg|invoice|contact|giftcode|boost
-
-# 普通用户名：排除保留路径和纯数字路径
-# 长度 5-32，仅允许字母、数字、下划线，且至少包含一个英文字母
-request if ${url} ~= /^https:\/\/t\.me\/(?!(?:joinchat|addstickers|addemoji|addtheme|share|proxy|socks|iv|s|c|login|setlanguage|confirmphone|bg|invoice|contact|giftcode|boost)(?:\/|\?|$))(?![0-9]+(?:\/|\?|$))(?=[A-Za-z0-9_]{5,32}(?:\/|\?|$))(?=.*[A-Za-z])([A-Za-z0-9_]{5,32})\/?(?:\?.*)?$/ as item then redirect(307, "${app}://resolve?domain=${item.1}")
+# 普通用户名：先沿用已验证的简单匹配规则
+request if ${url} ~= /^https:\/\/t\.me\/([A-Za-z][A-Za-z0-9_]{3,30}[A-Za-z0-9])\/?(?:\?.*)?$/ as item then redirect(307, "${app}://resolve?domain=${item.1}")
 
 # 私有邀请链接
 request if ${url} ~= /^https:\/\/t\.me\/\+([A-Za-z0-9_-]+)\/?(?:\?.*)?$/ as item then redirect(307, "${app}://join?invite=${item.1}")
