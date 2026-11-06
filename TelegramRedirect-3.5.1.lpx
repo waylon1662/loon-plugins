@@ -1,17 +1,20 @@
-#!name=Telegram 重定向（Loon 3.5.1+ 兼容版）
-#!desc=适配 Loon 新版 Rewrite 语法；支持 t.me / telegram.me 用户名链接、私有邀请链接及尾斜杠/查询参数。
+#!name=Telegram 重定向（Swiftgram 专用）
+#!desc=将 t.me 链接重定向至 Swiftgram，适配 Loon 3.5.1+
 #!author=OpenAI
 #!loon_version=3.5.1(978)
-
-[Argument]
-app = select,"sg","tg",tag=客户端
 
 [MITM]
 hostname = %APPEND% t.me, telegram.me
 
 [Rewrite]
-# 公开用户名链接：5-32 位 Telegram 用户名；允许尾斜杠和查询参数
-request if ${url} ~= /^https:\/\/(?:www\.)?(?:t\.me|telegram\.me)\/([A-Za-z][A-Za-z0-9_]{3,30}[A-Za-z0-9])\/?(?:\?.*)?$/ as item then redirect(307, "${app}://resolve?domain=${item.1}")
+# 普通用户名链接
+request if ${url} ~= /^https:\/\/(?:www\.)?(?:t\.me|telegram\.me)\/([A-Za-z][A-Za-z0-9_]{3,30}[A-Za-z0-9])\/?(?:\?.*)?$/ as item then redirect(307, "sg://resolve?domain=${item.1}")
 
-# 私有邀请链接：允许尾斜杠和查询参数
-request if ${url} ~= /^https:\/\/(?:www\.)?(?:t\.me|telegram\.me)\/\+([A-Za-z0-9_-]+)\/?(?:\?.*)?$/ as item then redirect(307, "${app}://join?invite=${item.1}")
+# 频道或群组消息链接
+request if ${url} ~= /^https:\/\/(?:www\.)?(?:t\.me|telegram\.me)\/([A-Za-z][A-Za-z0-9_]{3,30}[A-Za-z0-9])\/([0-9]+)\/?(?:\?.*)?$/ as item then redirect(307, "sg://resolve?domain=${item.1}&post=${item.2}")
+
+# 私有邀请链接
+request if ${url} ~= /^https:\/\/(?:www\.)?(?:t\.me|telegram\.me)\/\+([A-Za-z0-9_-]+)\/?(?:\?.*)?$/ as item then redirect(307, "sg://join?invite=${item.1}")
+
+# 旧格式私有邀请链接
+request if ${url} ~= /^https:\/\/(?:www\.)?(?:t\.me|telegram\.me)\/joinchat\/([A-Za-z0-9_-]+)\/?(?:\?.*)?$/ as item then redirect(307, "sg://join?invite=${item.1}")
