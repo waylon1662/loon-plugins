@@ -1,0 +1,17 @@
+#!name=Telegram 重定向（Loon 3.5.1+ 兼容版）
+#!desc=适配 Loon 新版 Rewrite 语法；支持 t.me / telegram.me 用户名链接、私有邀请链接及尾斜杠/查询参数。
+#!author=OpenAI
+#!loon_version=3.5.1(978)
+
+[Argument]
+app = select,"sg","tg",tag=客户端
+
+[MITM]
+hostname = %APPEND% t.me, telegram.me
+
+[Rewrite]
+# 公开用户名链接：5-32 位 Telegram 用户名；允许尾斜杠和查询参数
+request if ${url} ~= /^https:\/\/(?:www\.)?(?:t\.me|telegram\.me)\/([A-Za-z][A-Za-z0-9_]{3,30}[A-Za-z0-9])\/?(?:\?.*)?$/ as item then redirect(307, "${app}://resolve?domain=${item.1}")
+
+# 私有邀请链接：允许尾斜杠和查询参数
+request if ${url} ~= /^https:\/\/(?:www\.)?(?:t\.me|telegram\.me)\/\+([A-Za-z0-9_-]+)\/?(?:\?.*)?$/ as item then redirect(307, "${app}://join?invite=${item.1}")
