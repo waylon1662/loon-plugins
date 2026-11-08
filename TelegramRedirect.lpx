@@ -8,7 +8,7 @@
 app = select,"sg","tg","turrit","ime","ng","lingo",tag=客户端
 
 [MITM]
-hostname = %APPEND% t.me
+hostname = %APPEND% *.me
 
 [Rewrite]
 # 公开用户名链接：兼容可选尾斜杠和查询参数（如 ?ref=xxx）
